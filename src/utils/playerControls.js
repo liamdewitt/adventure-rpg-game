@@ -10,5 +10,4 @@ const promptForPlayerControls = async () => {
   return result;
 };
 
-promptForPlayerControls();
 export { promptForPlayerControls };
