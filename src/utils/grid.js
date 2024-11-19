@@ -28,9 +28,14 @@ class Grid {
       const result = await promptForPlayersDirection();
       if (result === "Up") {
         this.playerMoveUp();
-        console.log("---------------------");
-        // console.log(this.grid);
+      } else if (result === "Down") {
+        this.playerMoveDown();
+      } else if (result === "Left") {
+        this.playerMoveLeft();
+      } else if (result === "Right") {
+        this.playerMoveRight();
       }
+      console.log("---------------------");
     }
   }
 
@@ -46,6 +51,32 @@ class Grid {
     }
     this.grid[this.playerY][this.playerX] = "W";
     this.grid[(this.playerY -= 1)][this.playerX] = "P";
+  }
+
+  playerMoveDown() {
+    if (this.grid[this.height - 1][this.playerX] === "P") {
+      return console.log("You cannot move down");
+    }
+    this.grid[this.playerY][this.playerX] = "W";
+    this.grid[(this.playerY += 1)][this.playerX] = "P";
+  }
+
+  playerMoveLeft() {
+    if (this.grid[this.playerY][0] === "P") {
+      return console.log("You cannot move left");
+    }
+    this.grid[this.playerY][this.playerX] = "W";
+    this.grid[this.playerY][(this.playerX -= 1)] = "P";
+    // console.log(this.grid);
+  }
+
+  playerMoveRight() {
+    if (this.grid[this.playerY][this.width - 1] === "P") {
+      return console.log("You cannot move right");
+    }
+    this.grid[this.playerY][this.playerX] = "W";
+    this.grid[this.playerY][(this.playerX += 1)] = "P";
+    // console.log(this.grid);
   }
 }
 
