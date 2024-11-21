@@ -1,7 +1,7 @@
 import { promptForPlayersDirection } from "./playerPrompts.js";
 
 class Grid {
-  constructor(width, height, playerPosX = 0, playerPosY = height - 1) {
+  constructor(width, height) {
     this.width = width;
     this.height = height;
     this.playerX = playerPosX;
@@ -17,13 +17,16 @@ class Grid {
     }
     //
     this.grid[0][this.grid[0].length - 1] = "G";
-    this.grid[height - 1][0] = "P"; //this.grid[height - 1][0]
-    // console.log(this.grid);
+    this.grid[height - 1][0] = "O"; //this.grid[height - 1][0]
     this.gameStart();
   }
 
   async gameStart() {
     while (true) {
+      if (this.grid[0][this.grid[0].length - 1] === "O") {
+        console.log("Congratulations! You've reached the goal!");
+        break;
+      }
       this.displayGrid();
       const result = await promptForPlayersDirection();
       if (result === "Up") {
@@ -46,39 +49,37 @@ class Grid {
   }
 
   playerMoveUp() {
-    if (this.grid[0][this.playerX] === "P") {
+    if (this.playerY === 0) {
       return console.log("You cannot move up");
     }
-    this.grid[this.playerY][this.playerX] = "W";
-    this.grid[(this.playerY -= 1)][this.playerX] = "P";
+    this.grid[this.playerY][this.playerX] = "x";
+    this.grid[(this.playerY -= 1)][this.playerX] = "O";
   }
 
   playerMoveDown() {
-    if (this.grid[this.height - 1][this.playerX] === "P") {
+    if (this.playerY === this.height - 1) {
       return console.log("You cannot move down");
     }
-    this.grid[this.playerY][this.playerX] = "W";
-    this.grid[(this.playerY += 1)][this.playerX] = "P";
+    this.grid[this.playerY][this.playerX] = "x";
+    this.grid[(this.playerY += 1)][this.playerX] = "O";
   }
 
   playerMoveLeft() {
-    if (this.grid[this.playerY][0] === "P") {
+    if (this.playerX === 0) {
       return console.log("You cannot move left");
     }
-    this.grid[this.playerY][this.playerX] = "W";
-    this.grid[this.playerY][(this.playerX -= 1)] = "P";
-    // console.log(this.grid);
+    this.grid[this.playerY][this.playerX] = "x";
+    this.grid[this.playerY][(this.playerX -= 1)] = "O";
   }
 
   playerMoveRight() {
-    if (this.grid[this.playerY][this.width - 1] === "P") {
+    if (this.playerX === this.width - 1) {
       return console.log("You cannot move right");
     }
-    this.grid[this.playerY][this.playerX] = "W";
-    this.grid[this.playerY][(this.playerX += 1)] = "P";
-    // console.log(this.grid);
+    this.grid[this.playerY][this.playerX] = "x";
+    this.grid[this.playerY][(this.playerX += 1)] = "O";
   }
 }
 
-const grid = new Grid(3, 5);
+const grid = new Grid(5, 10);
 // console.log(grid);
