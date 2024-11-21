@@ -22,10 +22,10 @@ class ItemObject extends GridObject {
   }
 }
 
-const test = new ItemObject({ name: "sword", attack: 2, defense: 3, hp: 4 });
-console.log(test);
-// test.getName();
-// test.getStats();
-test.describe();
+// const test = new ItemObject({ name: "sword", attack: 2, defense: 3, hp: 4 });
+// console.log(test);
+// // test.getName();
+// // test.getStats();
+// test.describe();
 
 export { ItemObject };

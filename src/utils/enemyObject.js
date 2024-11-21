@@ -22,10 +22,10 @@ class EnemyObject extends GridObject {
   }
 }
 
-const test = new EnemyObject({ name: "spider", attack: 1, defense: 2, hp: 3 });
-console.log(test);
-// test.getName();
-// test.getStats();
-test.describe();
+// const test = new EnemyObject({ name: "spider", attack: 1, defense: 2, hp: 3 });
+// console.log(test);
+// // test.getName();
+// // test.getStats();
+// test.describe();
 
 export { EnemyObject };
