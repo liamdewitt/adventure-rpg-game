@@ -1,7 +1,7 @@
 import { promptForPlayersDirection } from "./playerPrompts.js";
 
 class Grid {
-  constructor(width, height) {
+  constructor(width, height, playerPosX = 0, playerPosY = height - 1) {
     this.width = width;
     this.height = height;
     this.playerX = playerPosX;
