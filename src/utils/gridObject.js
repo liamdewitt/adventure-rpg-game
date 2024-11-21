@@ -13,9 +13,9 @@ class GridObject {
 
   getStats() {
     console.log(
-      `Attack: ${this.#profile.attack}, Defense: ${
+      `HP: ${this.#profile.hp} ATK: ${this.#profile.attack}, Def: ${
         this.#profile.defense
-      }, HP: ${this.#profile.hp}`
+      }`
     );
   }
 
