@@ -13,12 +13,21 @@ class EnemyObject extends GridObject {
     this.#profile = stats;
     this.type = "enemy";
   }
-  //will inherit getStats() method
   //will inherit getName() method
   //will inherit describe() method
+  getStats() {
+    return {
+      name: this.#profile.name,
+      attack: this.#profile.attack,
+      defense: this.#profile.defense,
+      hp: this.#profile.hp,
+    };
+  }
+
   describe() {
-    console.log(`You encountered a ${this.#profile.name}!`);
-    this.getStats();
+    const stats = this.getStats();
+    console.log(`You encountered a ${stats.name}!`);
+    console.log(`HP: ${stats.hp} ATK: ${stats.attack} DEF: ${stats.defense}`);
   }
 }
 
