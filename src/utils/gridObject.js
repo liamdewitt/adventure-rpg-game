@@ -6,9 +6,9 @@ class GridObject {
     hp: 0,
   };
 
-  constructor(stats) {
+  constructor(stats, type = "no event") {
     this.#profile = stats;
-    this.type = "item";
+    this.type = type;
   }
 
   getStats() {
