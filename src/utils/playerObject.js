@@ -12,16 +12,36 @@ class PlayerObject extends GridObject {
     this.#profile = stats;
     this.type = "player";
   }
-  //will inherit getStats() method
+
+  getStats() {
+    return {
+      name: this.#profile.name,
+      attack: this.#profile.attack,
+      defense: this.#profile.defense,
+      hp: this.#profile.hp,
+    };
+  }
+
+  addStats(object) {
+    if (object.attack) {
+      this.#profile.attack += object.attack;
+    }
+    if (object.hp) {
+      this.#profile.hp += object.hp;
+    }
+    if (object.defense) {
+      this.#profile.defense += object.defense;
+    }
+  }
+
+  describe() {
+    const stats = this.getStats();
+    console.log(
+      `Players Stats: HP: ${stats.hp} ATK: ${stats.attack} DEF: ${stats.defense}`
+    );
+  }
   //will inherit getName() method
   //will inherit describe() method
 }
 
-const test = new PlayerObject({
-  name: "player",
-  attack: 10,
-  defense: 5,
-  hp: 5,
-});
-// console.log(test);
-// test.getStats();
+export { PlayerObject };
