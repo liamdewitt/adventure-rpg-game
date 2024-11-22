@@ -1,15 +1,23 @@
 import { EnemyObject } from "./enemyObject.js";
 import { GridObject } from "./gridObject.js";
 import { ItemObject } from "./itemObject.js";
+import { PlayerObject } from "./playerObject.js";
 import { promptForPlayersDirection } from "./playerPrompts.js";
 
 class Grid {
+  #currentObject;
   constructor(width, height, playerPosX = 0, playerPosY = height - 1) {
     this.width = width;
     this.height = height;
     this.playerX = playerPosX;
     this.playerY = playerPosY;
+    this.player = new PlayerObject({
+      attack: 10,
+      defense: 5,
+      hp: 20,
+    });
 
+    //creates grid
     this.grid = [];
     for (let row = 0; row < this.height; row++) {
       let thisRow = [];
@@ -18,18 +26,15 @@ class Grid {
       }
       this.grid.push(thisRow);
     }
-    //
+    //goal top right
     this.grid[0][this.grid[0].length - 1] = "⭐";
+    //player bottom left
     this.grid[height - 1][0] = "♚"; //this.grid[height - 1][0]
     this.gameStart();
   }
 
   async gameStart() {
     while (true) {
-      if (this.grid[0][this.grid[0].length - 1] === "♚") {
-        console.log("Congratulations! You've reached the goal!");
-        break;
-      }
       this.displayGrid();
       const result = await promptForPlayersDirection();
       if (result === "Up") {
@@ -46,37 +51,80 @@ class Grid {
   }
 
   displayGrid() {
+    this.player.describe();
     for (let rowIndex = 0; rowIndex < this.grid.length; rowIndex++) {
       console.log(this.grid[rowIndex].join("        "));
     }
   }
 
   eventSpawner() {
-    if (this.grid[0][this.grid[0].length - 1] === "♚") {
-      return;
-    }
     const randomNum = Math.floor(Math.random() * 10) + 1;
     if (randomNum <= 3) {
       const enemyEncounter = new EnemyObject({
         name: "spider",
-        attack: 1,
-        defense: 2,
-        hp: 3,
+        attack: 6,
+        defense: 5,
+        hp: 15,
       });
-      enemyEncounter.describe();
       return enemyEncounter;
     } else if (randomNum > 4 && randomNum <= 5) {
       const itemDiscovery = new ItemObject({
         name: "sword",
-        attack: 2,
-        defense: 3,
-        hp: 4,
+        attack: 5,
+        defense: 2,
+        hp: 2,
       });
-      itemDiscovery.describe();
       return itemDiscovery;
     }
     const noEncounter = new GridObject();
-    noEncounter.describe();
+    return noEncounter;
+  }
+
+  executeTurn() {
+    if (this.grid[0][this.grid[0].length - 1] === "♚") {
+      console.log("Congratulations! You've reached the goal!");
+      process.exit();
+    } else if (this.#currentObject.type === "item") {
+      this.#currentObject.describe();
+      const itemStats = this.#currentObject.getStats();
+      this.player.addStats(itemStats);
+      return;
+    } else if (this.#currentObject.type === "no event") {
+      return this.#currentObject.describe();
+    }
+
+    this.#currentObject.describe();
+    const enemyStats = this.#currentObject.getStats();
+    const playerStats = this.player.getStats();
+
+    if (enemyStats.defense > playerStats.attack) {
+      console.log("Y O U    D I E D");
+      process.exit();
+    }
+
+    let playerDamage = 0;
+    while (enemyStats.hp > 0) {
+      const playerAttackPotency = playerStats.attack - enemyStats.defense;
+      const enemyAttackPotency = enemyStats.attack - playerStats.defense;
+
+      if (playerAttackPotency > 0) {
+        enemyStats.hp -= playerAttackPotency;
+      }
+
+      if (enemyAttackPotency > 0) {
+        playerStats.hp -= enemyAttackPotency;
+        playerDamage += enemyAttackPotency;
+      }
+    }
+
+    if (playerStats.hp <= 0) {
+      console.log("Y O U    D I E D");
+      process.exit();
+    }
+
+    this.player.addStats({ hp: -playerDamage });
+    console.log("E N E M Y    F E L L E D");
+    this.player.describe();
   }
 
   playerMoveUp() {
@@ -85,7 +133,8 @@ class Grid {
     }
     this.grid[this.playerY][this.playerX] = "x";
     this.grid[(this.playerY -= 1)][this.playerX] = "♚";
-    this.eventSpawner();
+    this.#currentObject = this.eventSpawner();
+    this.executeTurn();
   }
 
   playerMoveDown() {
@@ -94,7 +143,8 @@ class Grid {
     }
     this.grid[this.playerY][this.playerX] = "x";
     this.grid[(this.playerY += 1)][this.playerX] = "♚";
-    this.eventSpawner();
+    this.#currentObject = this.eventSpawner();
+    this.executeTurn();
   }
 
   playerMoveLeft() {
@@ -103,7 +153,8 @@ class Grid {
     }
     this.grid[this.playerY][this.playerX] = "x";
     this.grid[this.playerY][(this.playerX -= 1)] = "♚";
-    this.eventSpawner();
+    this.#currentObject = this.eventSpawner();
+    this.executeTurn();
   }
 
   playerMoveRight() {
@@ -112,9 +163,10 @@ class Grid {
     }
     this.grid[this.playerY][this.playerX] = "x";
     this.grid[this.playerY][(this.playerX += 1)] = "♚";
-    this.eventSpawner();
+    this.#currentObject = this.eventSpawner();
+    this.executeTurn();
   }
 }
 
-const grid = new Grid(5, 10);
+new Grid(5, 10);
 // console.log(grid);
