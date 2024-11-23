@@ -34,8 +34,8 @@ The **RPG Game Grid** is a grid-based RPG game built with object-oriented progra
 ## Installation
 1. Clone the repository:  
    ```bash
-   git clone https://github.com/yourusername/rpg-game-grid.git
-   cd rpg-game-grid
+   git clone https://github.com/liamdewitt/adventure-rpg-game
+   cd adventure-rpg-game
 
 2. Install dependencies:
     ```bash
